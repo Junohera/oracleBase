@@ -1,0 +1,6 @@
+.classpath
+.project
+bin/
+temp/
+.DS_Store
+copy/
