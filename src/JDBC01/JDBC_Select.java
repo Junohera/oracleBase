@@ -14,7 +14,7 @@ public class JDBC_Select {
 		String pw = "juno";
 		String driver = "oracle.jdbc.driver.OracleDriver";
 		Connection con = null;
-		PreparedStatement ppstmt = null; // SQL 실행도구
+		PreparedStatement ps = null; // SQL 실행도구
 		ResultSet res = null; // SQL 명령 수행 결과를 저장하는 클래스
 		try {
 			Class.forName(driver);
@@ -24,10 +24,10 @@ public class JDBC_Select {
 			String sql = "SELECT * FROM CUSTOMER";
 			
 			// preparedStatement : SQL 문을 Connection 객체에 적용하여 결과를 얻어낸 도구
-			ppstmt = con.prepareStatement(sql); // 도구 연결 (준비)
+			ps = con.prepareStatement(sql); // 도구 연결 (준비)
 			
 			// SQL 명령에 의해 얻어진 결과를 res에 저장합니다.
-			res = ppstmt.executeQuery(); // SQL 실행결과 리턴 : 형식 ResultSet
+			res = ps.executeQuery(); // SQL 실행결과 리턴 : 형식 ResultSet
 			System.out.println("번호\t이름\t이메일\t\t전화번호");
 			System.out.println("---------------------------------------------");
 			
@@ -40,9 +40,11 @@ public class JDBC_Select {
 				System.out.printf("%d\t%s\t%s\t%s\n", num, name, email, tel);
 			}
 			
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
 		} catch (SQLException e) {
 			e.printStackTrace();
-		} catch (ClassNotFoundException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		
