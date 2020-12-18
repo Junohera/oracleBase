@@ -4,3 +4,4 @@ bin/
 temp/
 .DS_Store
 copy/
+.settings/org.eclipse.jdt.core.prefs
