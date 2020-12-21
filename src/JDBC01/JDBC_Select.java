@@ -15,7 +15,7 @@ public class JDBC_Select {
 		String driver = "oracle.jdbc.driver.OracleDriver";
 		Connection con = null;
 		PreparedStatement ps = null; // SQL 실행도구
-		ResultSet res = null; // SQL 명령 수행 결과를 저장하는 클래스
+		ResultSet rs = null; // SQL 명령 수행 결과를 저장하는 클래스
 		try {
 			Class.forName(driver);
 			con = DriverManager.getConnection(url, id, pw);
@@ -26,17 +26,17 @@ public class JDBC_Select {
 			// preparedStatement : SQL 문을 Connection 객체에 적용하여 결과를 얻어낸 도구
 			ps = con.prepareStatement(sql); // 도구 연결 (준비)
 			
-			// SQL 명령에 의해 얻어진 결과를 res에 저장합니다.
-			res = ps.executeQuery(); // SQL 실행결과 리턴 : 형식 ResultSet
+			// SQL 명령에 의해 얻어진 결과를 rs에 저장합니다.
+			rs = ps.executeQuery(); // SQL 실행결과 리턴 : 형식 ResultSet
 			System.out.println("번호\t이름\t이메일\t\t전화번호");
 			System.out.println("---------------------------------------------");
 			
-			// res.next() : 다음 레코드로 이동. 다음 레코드가 있으면 true 없으면 false
-			while (res.next()) {
-				int num = res.getInt("num");
-				String name = res.getString("name");
-				String email = res.getString("email");
-				String tel = res.getString("tel");
+			// rs.next() : 다음 레코드로 이동. 다음 레코드가 있으면 true 없으면 false
+			while (rs.next()) {
+				int num = rs.getInt("num");
+				String name = rs.getString("name");
+				String email = rs.getString("email");
+				String tel = rs.getString("tel");
 				System.out.printf("%d\t%s\t%s\t%s\n", num, name, email, tel);
 			}
 			
