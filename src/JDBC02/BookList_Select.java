@@ -15,23 +15,23 @@ public class BookList_Select {
 		String driver = "oracle.jdbc.driver.OracleDriver";
 		Connection con = null;
 		PreparedStatement ps = null; // SQL 실행도구
-		ResultSet res = null; // SQL 명령 수행 결과를 저장하는 클래스
+		ResultSet rs = null; // SQL 명령 수행 결과를 저장하는 클래스
 		try {
 			Class.forName(driver);
 			con = DriverManager.getConnection(url, id, pw);
 			String sql = "SELECT * FROM BOOKLIST";
 			ps = con.prepareStatement(sql);
-			res = ps.executeQuery();
+			rs = ps.executeQuery();
 			System.out.println("도서번호\t제목\t출판년도\t입고가격\t출고가격\t등급");
 			System.out.println("---------------------------------------------");
-			while (res.next()) {
-				String booknum = res.getString("booknum");
-				String subject = res.getString("subject");
-				String grade = res.getString("grade");
+			while (rs.next()) {
+				String booknum = rs.getString("booknum");
+				String subject = rs.getString("subject");
+				String grade = rs.getString("grade");
 				
-				int makeyear = res.getInt("makeyear");
-				int inprice = res.getInt("inprice");
-				int outprice = res.getInt("outprice");
+				int makeyear = rs.getInt("makeyear");
+				int inprice = rs.getInt("inprice");
+				int outprice = rs.getInt("outprice");
 
 				System.out.printf("%s\t%s\t%d\t%d\t%d\t%s\n", booknum, subject, makeyear, inprice, outprice, grade);
 			}
