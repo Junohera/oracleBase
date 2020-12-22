@@ -11,6 +11,7 @@ public class PersonDto {
 	private int bpoint;
 	private int age;
 	private String gender;
+	
 	public String getPersonnum() {
 		return personnum;
 	}
