@@ -25,7 +25,7 @@ public class BookDriver {
 			switch (choice) {
 			case "2": insertData(); break;
 			case "3": selectData(); selectCount++; break;
-			case "4": updateDate(); break;
+			case "4": updateData(); break;
 			case "5": deleteData(); break;
 			}
 			
@@ -74,7 +74,7 @@ public class BookDriver {
 		}
 	}
 	
-	public static void updateDate() {
+	public static void updateData() {
 		BookDto book = new BookDto();
 		Scanner sc = new Scanner(System.in);
 		BookDao bdao = new BookDao();
@@ -155,6 +155,7 @@ public class BookDriver {
 		ArrayList<BookDto> list = null;
 		list = bdao.select();
 		// list 안에는 BookDto 형태의 객체들이 데이터베이스테이블의 레코드 개수만큼 들어있습니다.
+		System.out.println("\n-----------------------------------------------------------------");
 		System.out.println("도서번호\t제목\t출판년도\t입고가격\t출고가격\t등급\t");
 		System.out.println("-----------------------------------------------------------------");
 

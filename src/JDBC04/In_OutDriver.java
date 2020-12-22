@@ -1,5 +1,7 @@
 package JDBC04;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -20,8 +22,8 @@ public class In_OutDriver {
 			switch (choice) {
 			case "2": insertData(); break;
 			case "3": selectData(); break;
-			case "4": /*updateDate();*/ break;
-			case "5": /*deleteData();*/ break;
+			case "4": updateDate(); break;
+			case "5": deleteData(); break;
 			}
 			
 			choice = home();
@@ -41,20 +43,113 @@ public class In_OutDriver {
 		System.out.print(">>메뉴선택 : ");
 		return sc.nextLine();
 	}
-
-	public static void insertData() {
-		// 날짜는 오늘날짜, 순번 : 오늘날짜에서 가장 큰 순번 + 1 -> 임의의 숫자를 넣되
-		// 날짜 + 순번이 중복되지 않게 입력
+	
+	public static void deleteData() {
 		In_OutDto dto = new In_OutDto();
 		Scanner sc = new Scanner(System.in);
-		// System.out.print("순번을 입력하세요"); // 시퀀스로 대체
-		// dto.setIndexk(Integer.parseInt(sc.nextLine())); // 시퀀스로 대체
-		BookDriver bd = new BookDriver();
-		bd.selectData();
+		In_OutDao dao = new In_OutDao();
+		
+		selectData();
+		
+		System.out.println("삭제할 매출일자를 입력하세요('yyyy-MM-dd')");
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		java.util.Date uDate = null;
+		
+		while(true) { // utilDate형으로 포맷이 맞을때까지 입력, 
+			try {
+				uDate = sdf.parse(sc.nextLine());
+				break;
+			} catch (ParseException e) {
+				System.out.println("잘못 입력하셨습니다. 다시 입력하세요('yyyy-MM-dd')");
+				e.printStackTrace();
+			}
+		}
+		
+		java.sql.Date sDate = new java.sql.Date(uDate.getTime());
+		dto.setOut_date(sDate); // dto에 저장
+		
+		String in = "";
+		int result = 0;
+		System.out.print("삭제할 매출의 순번을 입력하세요 - 필수");
+		while(true) {
+			if (!(in = sc.nextLine()).equals("")) {
+				dto.setIndexk(Integer.parseInt(in));
+				result = dao.delete(dto);
+				break;
+			} else {
+				System.out.println("삭제할 매출의 순번을 입력해주세요 - 필수");
+			}
+		}
+		if (result == 1) {
+			System.out.println("삭제 성공 :)");
+		} else {
+			System.out.println("삭제 실패 :(");
+		}
+	}
+	
+	public static void updateDate() {
+		In_OutDto dto = new In_OutDto();
+		Scanner sc = new Scanner(System.in);
+		In_OutDao dao = new In_OutDao();
+		
+		String in;
+		
+		// 문자로 입력받은 날짜 -> java.util.Date로 형변환 -> java.sql.Date로 변환 -> dto.setOut_date()로 저장
+		System.out.print("수정하고자하는 매출의 날짜를 입력하세요('yyyy-MM-dd')");
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		java.util.Date uDate = null;
+		
+		while(true) { // utilDate형으로 포맷이 맞을때까지 입력, 
+			try {
+				uDate = sdf.parse(sc.nextLine());
+				break;
+			} catch (ParseException e) {
+				System.out.println("잘못 입력하셨습니다. 다시 입력하세요('yyyy-MM-dd')");
+				e.printStackTrace();
+			}
+		}
+		java.sql.Date sDate = new java.sql.Date(uDate.getTime()); // utilDate의 시간을 반환받아 sqlDate로 변경
+		dto.setOut_date(sDate); // dto에 저장
+		
+		selectData();
+		System.out.print("수정하고자 하는 매출의 순번을 입력하세요 - 필수");
+		if ((in = sc.nextLine()).equals("")) {
+			dto.setIndexk(0);
+		} else {
+			dto.setIndexk(Integer.parseInt(in));
+		}
+		
+		new BookDriver().selectData();
+		System.out.print("수정할 도서의 도서번호를 선택하세요(수정하지않으려면 Enter):");
+		dto.setBooknum(sc.nextLine());
+		
+		new PersonDriver().selectData();
+		System.out.print("수정할 도서의 회원번호를 선택하세요(수정하지않으려면 Enter):");
+		dto.setPersonnum(sc.nextLine());
+		
+		System.out.print("수정하고자하는 할인금액을 입력하세요(수정하지않으려면 Enter):");
+		if ((in = sc.nextLine()).equals("")) {
+			dto.setDiscount(0);
+		} else {
+			dto.setDiscount(Integer.parseInt(in));
+		}
+		
+		int result = dao.update(dto);
+		
+		if (result == 1) {
+			System.out.println("수정 성공 :)");
+		} else {
+			System.out.println("수정 실패 :(");
+		}
+	}
+
+	public static void insertData() {
+		In_OutDto dto = new In_OutDto();
+		Scanner sc = new Scanner(System.in);
+		new BookDriver().selectData();
 		System.out.print("도서번호를 입력하세요: ");
 		dto.setBooknum(sc.nextLine());
-		PersonDriver pd = new PersonDriver();
-		pd.selectData();
+		new PersonDriver().selectData();
 		System.out.print("회원번호를 입력하세요: ");
 		dto.setPersonnum(sc.nextLine());
 		System.out.print("할인금액을 입력하세요: ");
@@ -75,6 +170,7 @@ public class In_OutDriver {
 		In_OutDao iDao = new In_OutDao();
 		ArrayList<In_OutDto> list = null;
 		list = iDao.select();
+		System.out.println("\n-----------------------------------------------------------------");
 		System.out.println("순번\t대여일자\t\t도서번호\t회원번호\t할인금액");
 		System.out.println("-----------------------------------------------------------------");
 

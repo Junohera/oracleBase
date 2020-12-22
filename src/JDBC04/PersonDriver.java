@@ -9,7 +9,8 @@ public class PersonDriver {
 		PersonDao dao = new PersonDao();
 		ArrayList<PersonDto> list = null;
 		list = dao.select();
-		System.out.println("번호%t이름%t전화번호%t생년월일%t가입일%t포인트%t나이%t성별\n");
+		System.out.println("\n-----------------------------------------------------------------");
+		System.out.println("번호\t이름\t전화번호\t생년월일\t가입일\t포인트\t나이\t성별");
 		System.out.println("-----------------------------------------------------------------");
 
 		for (PersonDto dto : list) {
