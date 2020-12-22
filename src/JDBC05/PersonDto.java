@@ -1,4 +1,4 @@
-package JDBC04;
+package JDBC05;
 
 import java.sql.Date;
 

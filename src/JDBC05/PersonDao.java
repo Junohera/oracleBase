@@ -1,4 +1,4 @@
-package JDBC04;
+package JDBC05;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -33,9 +33,7 @@ public class PersonDao {
 			if (con != null) con.close();
 			if (ps != null) ps.close();
 			if (rs != null) rs.close();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+		} catch (SQLException e) {e.printStackTrace();}
 	}
 	
 	public int delete(String personnum) {
